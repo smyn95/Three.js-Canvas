@@ -17,10 +17,14 @@ ctx.scale(dpr, dpr);
 // ctx.fillRect(10, 10, 50, 50);
 
 class Particle {
-  constructor(x, y, radius) {
+  constructor(x, y, radius, vy) {
     this.x = x;
     this.y = y;
     this.radius = radius;
+    this.vy = vy;
+  }
+  update() {
+    this.y += this.vy;
   }
   draw() {
     ctx.beginPath();
@@ -31,11 +35,7 @@ class Particle {
   }
 }
 
-const x = 100;
-const y = 100;
-const radius = 50;
-const particle = new Particle(x, y, radius);
-const TOTAL = 5;
+const TOTAL = 20;
 const randomNumBetween = (min, max) => {
   return Math.random() * (max - min + 1) + min;
 };
@@ -45,7 +45,8 @@ for (let i = 0; i < TOTAL; i++) {
   const x = randomNumBetween(0, canvaseWidth);
   const y = randomNumBetween(0, canvaseHeight);
   const radius = randomNumBetween(50, 100);
-  const particle = new Particle(x, y, radius);
+  const vy = randomNumBetween(1, 5);
+  const particle = new Particle(x, y, radius, vy);
   particles.push(particle);
 }
 
@@ -62,8 +63,18 @@ function animate() {
   if (delta < interval) return;
 
   ctx.clearRect(0, 0, canvaseWidth, canvaseHeight);
-  particle.y += 1;
-  particle.draw();
+
+  particles.forEach((particle) => {
+    particle.update();
+    particle.draw();
+
+    if (particle.y - particle.radius > canvaseHeight) {
+      particle.y = -particle.radius;
+      particle.x = randomNumBetween(0, canvaseWidth);
+      particle.radius = randomNumBetween(50, 100);
+      particle.vy = randomNumBetween(1, 5);
+    }
+  });
 
   then = now - (delta % interval);
 }
