@@ -31,7 +31,7 @@ class Particle {
   draw() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, (Math.PI / 180) * 360);
-    ctx.fillStyle = "tomato";
+    ctx.fillStyle = "yellow";
     ctx.fill();
     ctx.closePath();
   }
