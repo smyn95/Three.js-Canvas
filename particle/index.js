@@ -4,16 +4,33 @@ const ctx = canvas.getContext("2d");
 console.log(ctx);
 const dpr = window.devicePixelRatio;
 
-const canvaseWidth = innerWidth;
-const canvaseHeight = innerHeight;
+let canvaseWidth;
+let canvaseHeight;
+let particles;
 
-canvas.style.width = canvaseWidth + "px";
-canvas.style.height = canvaseHeight + "px";
+function init() {
+  canvaseWidth = innerWidth;
+  canvaseHeight = innerHeight;
 
-canvas.width = canvaseWidth * dpr;
-canvas.height = canvaseHeight * dpr;
-ctx.scale(dpr, dpr);
+  canvas.style.width = canvaseWidth + "px";
+  canvas.style.height = canvaseHeight + "px";
 
+  canvas.width = canvaseWidth * dpr;
+  canvas.height = canvaseHeight * dpr;
+  ctx.scale(dpr, dpr);
+
+  particles = [];
+  const TOTAL = canvaseWidth / 50;
+
+  for (let i = 0; i < TOTAL; i++) {
+    const x = randomNumBetween(0, canvaseWidth);
+    const y = randomNumBetween(0, canvaseHeight);
+    const radius = randomNumBetween(50, 100);
+    const vy = randomNumBetween(1, 5);
+    const particle = new Particle(x, y, radius, vy);
+    particles.push(particle);
+  }
+}
 // ctx.fillRect(10, 10, 50, 50);
 
 const feGaussianBlur = document.querySelector("feGaussianBlur");
@@ -74,20 +91,9 @@ class Particle {
   }
 }
 
-const TOTAL = 20;
 const randomNumBetween = (min, max) => {
   return Math.random() * (max - min + 1) + min;
 };
-let particles = [];
-
-for (let i = 0; i < TOTAL; i++) {
-  const x = randomNumBetween(0, canvaseWidth);
-  const y = randomNumBetween(0, canvaseHeight);
-  const radius = randomNumBetween(50, 100);
-  const vy = randomNumBetween(1, 5);
-  const particle = new Particle(x, y, radius, vy);
-  particles.push(particle);
-}
 
 // 60 FPS
 let interval = 1000 / 60;
@@ -118,4 +124,11 @@ function animate() {
   then = now - (delta % interval);
 }
 
-animate();
+window.addEventListener("load", () => {
+  init();
+  animate();
+});
+
+window.addEventListener("resize", () => {
+  init();
+});
