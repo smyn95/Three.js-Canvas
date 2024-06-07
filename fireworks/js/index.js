@@ -25,11 +25,16 @@ class Canvas extends CanvasOption {
   }
 
   createParticles() {
-    const PARTICLE_NUM = 1
-    for(let i = 0; i < PARTICLE_NUM; i++) {
+    const PARTICLE_NUM = 20;
+
       const x = randomNumBetween(0, this.canvasWidth);
       const y = randomNumBetween(0, this.canvasHeight);
-      this.particles.push(new Particle(x, y));
+
+    for(let i = 0; i < PARTICLE_NUM; i++) {
+      const vx = randomNumBetween(-5, 5);
+      const vy = randomNumBetween(-5, 5);
+
+      this.particles.push(new Particle(x, y, vx, vy));
     }
   }
 
