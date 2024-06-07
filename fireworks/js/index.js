@@ -25,7 +25,7 @@ class Canvas extends CanvasOption {
   }
 
   createParticles() {
-    const PARTICLE_NUM = 20;
+    const PARTICLE_NUM = 200;
 
       const x = randomNumBetween(0, this.canvasWidth);
       const y = randomNumBetween(0, this.canvasHeight);
@@ -52,9 +52,11 @@ class Canvas extends CanvasOption {
       this.ctx.fillStyle = this.bgColor;
       this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
 
-      this.particles.forEach((particle) => {
+      this.particles.forEach((particle, index) => {
         particle.update();
         particle.draw();
+
+        if (particle.opacity < 0) this.particles.splice(index, 1);
       });
 
       then = now - (delta % this.interval);
